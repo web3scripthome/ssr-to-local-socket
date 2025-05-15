@@ -1,0 +1,108 @@
+<Window x:Class="SimpleV2ray.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SimpleV2ray.Views"
+        mc:Ignorable="d"
+        Title="SimpleV2ray" Height="600" Width="900">
+    <Window.Resources>
+        <local:BoolToRunningConverter x:Key="BoolToRunningConverter" />
+        <local:BoolToRunningColorConverter x:Key="BoolToRunningColorConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="auto"/> 
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ToolBarTray Grid.Row="0">
+            <ToolBar Style="{StaticResource MaterialDesignToolBar}">
+                <Button x:Name="btnAddCustomServer" Click="btnAddCustomServer_Click"
+                        ToolTip="添加自定义配置服务器">
+                    <materialDesign:PackIcon Kind="ServerPlus" />
+                </Button>
+                <Button x:Name="btnDeleteServer" Click="btnDeleteServer_Click"
+                        ToolTip="删除所选服务器">
+                    <materialDesign:PackIcon Kind="ServerRemove" />
+                </Button>
+                <Separator />
+                <Button x:Name="btnStart" Click="btnStart_Click"
+                        ToolTip="启动服务">
+                    <materialDesign:PackIcon Kind="Play" />
+                </Button>
+                <Button x:Name="btnStop" Click="btnStop_Click"
+                        ToolTip="停止服务">
+                    <materialDesign:PackIcon Kind="Stop" />
+                </Button>
+                <Separator />
+                <TextBlock VerticalAlignment="Center" Text="状态: " />
+                <TextBlock x:Name="txtStatus" VerticalAlignment="Center" Text="未运行" Foreground="Gray" FontWeight="Bold" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <DataGrid Grid.Row="1" x:Name="dgServers" AutoGenerateColumns="False"
+                  IsReadOnly="True" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="名称" Binding="{Binding remarks}" Width="*"/>
+                <DataGridTextColumn Header="地址" Binding="{Binding address}" Width="*"/>
+                <DataGridTextColumn Header="核心类型" Binding="{Binding coreType}" Width="*"/> 
+                <DataGridTemplateColumn Header="状态" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding isRunning, Converter={StaticResource BoolToRunningConverter}}" 
+                                       Foreground="{Binding isRunning, Converter={StaticResource BoolToRunningColorConverter}}"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Clash代理端口列表 -->
+        <Grid Grid.Row="2" x:Name="gridClashPorts" Visibility="Collapsed" Margin="0,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" Text="Clash代理端口列表)" 
+                       FontWeight="Bold" Margin="5,5,5,5"/>
+            
+            <DataGrid Grid.Row="1" x:Name="dgClashPorts" 
+                      AutoGenerateColumns="False" 
+                      IsReadOnly="True" 
+                      SelectionMode="Single"
+                      >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="名称" Binding="{Binding name}" Width="*"/>
+                    <DataGridTextColumn Header="类型" Binding="{Binding type}" Width="100"/>
+                    <DataGridTextColumn Header="端口" Binding="{Binding port}" Width="80"/>
+                    <DataGridTextColumn Header="代理" Binding="{Binding proxy}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="txtLog" Grid.Column="0" 
+                     IsReadOnly="True" 
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Height="150"/>
+            <Button x:Name="btnClearLog" Grid.Column="1"
+                    Content="清除日志"
+                    Click="btnClearLog_Click"
+                    VerticalAlignment="Top"
+                    Margin="10,10,10,0"/>
+        </Grid>
+    </Grid>
+</Window> 
