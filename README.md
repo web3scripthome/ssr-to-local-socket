@@ -1,4 +1,4 @@
-# ssr tp local proxy 
+# ssr to local proxy 
 
 这是一个将ssr代理转为本地socks,https代理的程序.
 将机场的多个节点在本地运行为多个Socks代理，适合空投，多开，等需要多IP使用的环境。
